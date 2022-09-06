@@ -2,9 +2,10 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-const Employee = require("./lib/Employee");
-const Engineer = require("./lib/Engineer");
-const Manager = require("./lib/Manager");
+const Employee = require("./lib/employee");
+const Engineer = require("./lib/engineer");
+const Manager = require("./lib/manager");
+const Intern = require("./lib/intern");
 
 // An array of questions to generate profiles
 const questions = [
@@ -77,3 +78,51 @@ const questions = [
         name: "email"
     },
 ];
+
+function init() {
+    inquirer.prompt(
+        questions
+    ).then ((data) => {
+        console.log(data);
+        writeToFile("index.html", data);
+    })
+}
+
+function writeToFile(fileName, data) {
+
+    var html = generateHtml(data);
+
+        function afterWriting (error) {
+            const output = (error) ? 'Error' : 'Success';
+            console.log(output);
+        }
+
+        fs.writeFile(fileName, html, afterWriting)
+}
+
+function generateHtml(data){
+    return `# ${data.title}  ${renderLicenseBadge(data.license)}
+
+    ## Description <span id=Description></span> 
+    ${data.description}
+  
+    ## Table of Contents
+    - [Descriptions](#Description)
+    - [Installation](#Installation)
+    - [Usage Information](#Usage)
+    - [License](#License)
+    - [Contributing](#Contributing)
+    - [Tests](#Tests)
+    - [Questions](#Questions)
+  
+    ## Installation <span id=Installation></span>
+    ${data.installation}
+  
+    ## Usage <span id=Usage></span> 
+    ${data.usage}
+  
+    ## License <span id=License></span> 
+    [${data.license}](${renderLicenseLink(data)})`;
+}
+
+init ()
