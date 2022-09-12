@@ -1,19 +1,14 @@
 // Packages and files required for this application
-// const inquirer = require('inquirer');
-// const fs = require('fs');
+const inquirer = require('inquirer');
+const fs = require('fs');
 
-const Employee = require("./lib/employee");
-// const Engineer = require("./lib/engineer");
+const Engineer = require("./lib/engineer");
 const Manager = require("./lib/manager");
-// const Intern = require("./lib/intern");
-
-// let newEmployee = new Employee ("Haruka", "123", "haruka@gmail.com");
-let newManager = new Manager ("Haruka", "123", "haruka@gmail.com", 0001);
-
-console.log(newManager);
+const Intern = require("./lib/intern");
+const employees = [];
 
 // An array of questions to generate profiles
-const basicQuestions = [
+const basicQuestion = [
     {
         type: "list",
         message: "Who would you like to add for your team?",
@@ -22,108 +17,142 @@ const basicQuestions = [
             "Manager",
             "Engineer",
             "Intern",
+            "No more member"
             ]
     },
     {
         type: "input",
         message: "What is the employee name?",
-        name: "name"
+        name: "name",
+        when: (data) => {
+            return (data.jobRole !== "No more member");
+        }
     },
     {
         type: "input",
         message: "What is the employee ID?",
-        name: "id"
+        name: "id",
+        when: (data) => {
+            return (data.jobRole !== "No more member");
+        }
     },
     {
         type: "input",
         message: "What is the employee email?",
-        name: "email"
-    },
+        name: "email",
+        when: (data) => {
+            return (data.jobRole !== "No more member");
+        }
+    }
 ];
 
-// const managerQuestion = [
-//     {
-//         type: "input",
-//         message: "What is the manager office number?",
-//         name: "officeNum"
-//     }
-// ];
+const managerQuestion = [
+    {
+        type: "input",
+        message: "What is the manager office number?",
+        name: "officeNum"
+    }
+];
 
-// const engineerQuestion = [
-//     {
-//         type: "input",
-//         message: "What is the engineer GitHub username?",
-//         name: "github"
-//     }
-// ];
+const engineerQuestion = [
+    {
+        type: "input",
+        message: "What is the engineer GitHub username?",
+        name: "github"
+    }
+];
 
-// const internQuestion = [
-//     {
-//         type: "input",
-//         message: "Which school did the intern attend?",
-//         name: "school"
-//     }
-// ];
+const internQuestion = [
+    {
+        type: "input",
+        message: "Which school did the intern attend?",
+        name: "school"
+    }
+];
 
-function init() {
-    inquirer.prompt(
-        basicQuestions
-    ).then ((data) => {
-        console.log(data);
-        writeToFile("index.html", data);
-    }).then ((specific) =>{
-        if (data.jobRole === "Manager"){
-            inquirer.prompt(
-                managerQuestion
-            )
-        } else if (data.jobRole === "Engineer"){
-            inquirer.prompt(
-                engineerQuestion
-            )
-        } else {
-            inquirer.prompt(
-                internQuestion
-            )
-        }
-    })
-
+function createManager(name, id, email, officeNum) {
+    const newManager = new Manager(name, id, email, officeNum);
+    employees.push(newManager);
+    mainQuestion();
 }
 
-// function writeToFile(fileName, data) {
+function createEngineer(name, id, email, gitHubUser) {
+    const newEngineer = new Engineer(name, id, email, gitHubUser);
+    employees.push(newEngineer);
+    mainQuestion();
+}
 
-//     var html = generateHtml(data);
+function createIntern(name, id, email, school) {
+    const newIntern = new Intern(name, id, email, school);
+    employees.push(newIntern);
+    mainQuestion();
+}
 
-//         function afterWriting (error) {
-//             const output = (error) ? 'Error' : 'Success';
-//             console.log(output);
-//         }
+function mainQuestion() {
+    inquirer.prompt(
+        basicQuestion
+    ).then ((data) => {
+        if (data.jobRole == "Manager"){
+            inquirer.prompt(
+                managerQuestion
+            ).then ((answers) => {
+                    createManager(data.name, data.id, data.email, answers.officeNum);
+                }
+            )
+        } else if (data.jobRole == "Engineer"){
+            inquirer.prompt(
+                engineerQuestion
+            ).then((answers) => {
+                createEngineer(data.name, data.id, data.email, answers.github);
+            })
+        } else if (data.jobRole == "Intern"){
+            inquirer.prompt(
+                internQuestion
+            ).then((answers) => {
+                createIntern(data.name, data.id, data.email, answers.school);
+            })
+        } else {
+            console.log (employees)
+            const htmlPageContent = generateHTML(employees);
 
-//         fs.writeFile(fileName, html, afterWriting)
-// }
+            fs.writeFile('index.html', htmlPageContent, (err) =>
+              err ? console.log(err) : console.log('Successfully created index.html!'));
+            return;
+        }
 
-// function generateHtml(data){
-//     return `# ${data.title}  ${renderLicenseBadge(data.license)}
+    })
+}
 
-//     ## Description <span id=Description></span> 
-//     ${data.description}
-  
-//     ## Table of Contents
-//     - [Descriptions](#Description)
-//     - [Installation](#Installation)
-//     - [Usage Information](#Usage)
-//     - [License](#License)
-//     - [Contributing](#Contributing)
-//     - [Tests](#Tests)
-//     - [Questions](#Questions)
-  
-//     ## Installation <span id=Installation></span>
-//     ${data.installation}
-  
-//     ## Usage <span id=Usage></span> 
-//     ${data.usage}
-  
-//     ## License <span id=License></span> 
-//     [${data.license}](${renderLicenseLink(data)})`;
-// }
+function generateHTML(employees){
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    </head>
+    <body>
+        ${employees.map((employee)=>{
+            return `<div class="card" style="width: 18rem;">
+            <div class="card-header">
+            ${employee.getRole()}
+              ${employee.getName()}
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">${employee.getID()}</li>
+              <li class="list-group-item">${employee.getEmail()}</li>
+              <li class="list-group-item">${employee.getRole()}</li>
+            </ul>
+          </div>`
+        })}
 
-// init ()
+    
+          
+        
+    </body>
+    </html>`;
+}
+
+mainQuestion()

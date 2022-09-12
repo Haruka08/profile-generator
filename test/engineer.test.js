@@ -5,5 +5,5 @@ test("test if this code will retern the series of questions", () => {
     expect(newEngineer.name).toBe("Haruka");
     expect(newEngineer.id).toBe(123);
     expect(newEngineer.email).toBe("haruka@gmail.com");
-    expect(newEngineer.gitHub).toBe("haruka08");
+    expect(newEngineer.gitHubUser).toBe("haruka08");
   });
