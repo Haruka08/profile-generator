@@ -88,6 +88,16 @@ function createIntern(name, id, email, school) {
     mainQuestion();
 }
 
+function variableInfo(employee){
+    if (employee.getRole() == "Manager"){
+        employee.getOfficeNum()
+    } else if (employee.getRole() == "Engineer"){
+        employee.getGithub()
+    } else {
+       employee.getSchool()
+    }
+}
+
 function mainQuestion() {
     inquirer.prompt(
         basicQuestion
@@ -142,8 +152,8 @@ function generateHTML(employees){
             </div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">${employee.getID()}</li>
-              <li class="list-group-item">${employee.getEmail()}</li>
-              <li class="list-group-item">${employee.getRole()}</li>
+              <li class="list-group-item" mailto:>${employee.getEmail()}</li>
+              <li class="list-group-item">${variableInfo(employee)}</li>
             </ul>
           </div>`
         })}
