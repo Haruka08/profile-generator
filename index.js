@@ -92,7 +92,7 @@ function variableInfo(personnel){
     if (personnel.getRole() == "Manager"){
         return `Office No.: ${personnel.getOfficeNum()}`
     } else if (personnel.getRole() == "Engineer"){
-        return `GitHub: ${personnel.getGithub()}`
+        return `<a href="https://github.com/${personnel.getGithub()}">GitHub: ${personnel.getGithub()}</a>`
     } else {
        return `School: ${personnel.getSchool()}`
     }
@@ -144,23 +144,27 @@ function generateHTML(employees){
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     </head>
     <body>
+        <div class="text-bg-danger p-3 text-lg-center">My Team</div>
+
+        <div class="d-flex justify-content-around flex-wrap">
         ${employees.map((employee)=>{
             return `<div class="card" style="width: 18rem;">
-            <div class="card-header">
-            ${employee.getRole()}
-              ${employee.getName()}
+            <div class="card-header text-bg-primary p-3">
+            <h2>${employee.getName()}</h2>
+            <h2>${employee.getRole()}</h2>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">ID: ${employee.getID()}</li>
-              <a href="mailto:${employee.getEmail()}">Email: ${employee.getEmail()}</a>
-              <li class="list-group-item">${variableInfo(employee)}</li>
+                <li class="list-group-item">ID: ${employee.getID()}</li>
+                <li class="list-group-item">
+                    <a href="mailto:${employee.getEmail()}">Email: ${employee.getEmail()}</a>
+                </li>
+                <li class="list-group-item">
+                ${variableInfo(employee)}
+                </li>
             </ul>
           </div>`
         })}
 
-    
-          
-        
     </body>
     </html>`;
 }
