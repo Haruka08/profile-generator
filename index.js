@@ -88,13 +88,13 @@ function createIntern(name, id, email, school) {
     mainQuestion();
 }
 
-function variableInfo(employee){
-    if (employee.getRole() == "Manager"){
-        `Office No.: ${employee.getOfficeNum()}`
-    } else if (employee.getRole() == "Engineer"){
-        `GitHub: ${employee.getGithub()}`
+function variableInfo(personnel){
+    if (personnel.getRole() == "Manager"){
+        return `Office No.: ${personnel.getOfficeNum()}`
+    } else if (personnel.getRole() == "Engineer"){
+        return `GitHub: ${personnel.getGithub()}`
     } else {
-       `School: ${employee.getSchool()}`
+       return `School: ${personnel.getSchool()}`
     }
 }
 
