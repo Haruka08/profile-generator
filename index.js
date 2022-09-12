@@ -90,11 +90,11 @@ function createIntern(name, id, email, school) {
 
 function variableInfo(employee){
     if (employee.getRole() == "Manager"){
-        employee.getOfficeNum()
+        `Office No.: ${employee.getOfficeNum()}`
     } else if (employee.getRole() == "Engineer"){
-        employee.getGithub()
+        `GitHub: ${employee.getGithub()}`
     } else {
-       employee.getSchool()
+       `School: ${employee.getSchool()}`
     }
 }
 
@@ -151,8 +151,8 @@ function generateHTML(employees){
               ${employee.getName()}
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">${employee.getID()}</li>
-              <li class="list-group-item" mailto:>${employee.getEmail()}</li>
+              <li class="list-group-item">ID: ${employee.getID()}</li>
+              <a href="mailto:${employee.getEmail()}">Email: ${employee.getEmail()}</a>
               <li class="list-group-item">${variableInfo(employee)}</li>
             </ul>
           </div>`
