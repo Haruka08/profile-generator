@@ -41,4 +41,4 @@ The website consists of following 2 sections:
 
 ## Screenshot of the modified website
 
-![The screenshot of the completed website](./dist/finished_page.png)
+![The screenshot of the completed website](./finished_page.png)
