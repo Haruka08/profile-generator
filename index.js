@@ -163,7 +163,8 @@ function generateHTML(employees){
                 </li>
             </ul>
           </div>`
-        })}
+        }).join(' ')
+    }
 
     </body>
     </html>`;
